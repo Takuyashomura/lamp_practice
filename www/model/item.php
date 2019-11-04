@@ -4,6 +4,7 @@ require_once 'db.php';
 
 // DB利用
 
+//itemデータを取得する関数
 function get_item($db, $item_id){
   $sql = "
     SELECT
