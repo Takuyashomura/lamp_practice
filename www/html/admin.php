@@ -21,4 +21,6 @@ if(is_admin($user) === false){
 //アイテム一覧用のアイテム情報を取得
 $items = get_all_items($db);
 
+$items = entity_assoc_array($items);
+
 include_once '../view/admin_view.php';
