@@ -81,12 +81,14 @@ function update_cart_amount($db, $cart_id, $amount){
     UPDATE
       carts
     SET
-      amount = {$amount}
+      amount = ?
     WHERE
-      cart_id = {$cart_id}
+      cart_id = ?
     LIMIT 1
   ";
-  return execute_query($db, $sql);
+  $params[] = $amount;
+  $params[] = $cart_id;
+  return execute_query($db, $sql,$params);
 }
 
 function delete_cart($db, $cart_id){
@@ -94,11 +96,11 @@ function delete_cart($db, $cart_id){
     DELETE FROM
       carts
     WHERE
-      cart_id = {$cart_id}
+      cart_id = ?
     LIMIT 1
   ";
-
-  return execute_query($db, $sql);
+  $params[] = $cart_id;
+  return execute_query($db, $sql,$params);
 }
 
 function purchase_carts($db, $carts){
@@ -123,10 +125,10 @@ function delete_user_carts($db, $user_id){
     DELETE FROM
       carts
     WHERE
-      user_id = {$user_id}
+      user_id = ?
   ";
-
-  execute_query($db, $sql);
+  $params[] = $user_id;
+  execute_query($db, $sql,$params);
 }
 
 

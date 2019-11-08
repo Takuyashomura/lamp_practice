@@ -94,13 +94,14 @@ function update_item_status($db, $item_id, $status){
     UPDATE
       items
     SET
-      status = {$status}
+      status = ?
     WHERE
-      item_id = {$item_id}
+      item_id = ?
     LIMIT 1
   ";
-  
-  return execute_query($db, $sql);
+  $params[] = $status;
+  $params[] = $item_id;
+  return execute_query($db, $sql,$params);
 }
 
 function update_item_stock($db, $item_id, $stock){
@@ -108,13 +109,14 @@ function update_item_stock($db, $item_id, $stock){
     UPDATE
       items
     SET
-      stock = {$stock}
+      stock =?
     WHERE
-      item_id = {$item_id}
+      item_id =?
     LIMIT 1
   ";
-  
-  return execute_query($db, $sql);
+$params[] = $stock;
+$params[] = $item_id;
+  return execute_query($db, $sql,$params);
 }
 
 function destroy_item($db, $item_id){
@@ -148,7 +150,7 @@ function delete_item($db, $item_id){
 // 非DB
 
 function is_open($item){
-  return $item['status'] === "1";
+  return strval($item['status']) === "1";
 }
 
 function validate_item($name, $price, $stock, $filename, $status){
