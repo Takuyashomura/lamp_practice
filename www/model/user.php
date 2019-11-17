@@ -44,7 +44,7 @@ function login_as($db, $name, $password){
   set_session('user_id', $user['user_id']);
   return $user;
 }
-
+//ログインユーザIDを取得
 function get_login_user($db){
   $login_user_id = get_session('user_id');
 
@@ -58,7 +58,7 @@ function regist_user($db, $name, $password, $password_confirmation) {
   
   return insert_user($db, $name, $password);
 }
-
+//ユーザIDが「一般」か「管理者」か判別する値を取得
 function is_admin($user){
   return $user['type'] === USER_TYPE_ADMIN;
 }

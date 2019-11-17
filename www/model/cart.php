@@ -53,7 +53,28 @@ function get_user_cart($db, $user_id, $item_id){
   return fetch_query($db, $sql);
 
 }
-
+function get_user_purchase($db, $user_id){
+  $sql = "
+    SELECT
+      order_id,
+      purchase_datetime,
+      purchase_total_price,
+      items.item_id,
+      items.price,
+      carts.amount
+    FROM
+      purchase_history
+    JOIN
+      items
+    JOIN
+      carts
+    ON
+      items.item_id = carts.item_id
+    WHERE
+      purchase_history.user_id = ?";
+  $params[] = $user_id;
+  return fetch_query($db,$sql,$params);
+}
 function add_cart($db, $item_id, $user_id) {
   $cart = get_user_cart($db, $item_id, $user_id);
   if($cart === false){
@@ -75,7 +96,47 @@ function insert_cart($db, $item_id, $user_id, $amount = 1){
 
   return execute_query($db, $sql);
 }
-
+function insert_purchase_details($db, $sql){
+  $sql = "
+    INSERT INTO
+      purchase_details(
+        order_id,
+        item_id,
+        purchase_item_price,
+        purchase_item_amount
+        )
+      VALUES(?,?,?,?)
+      ";
+      $params[] = $order_id;
+      $params[] = $item_id;
+      $params[] = $purchase_item_price;
+      $params[] = $purchase_item_amount;
+      return execute_query($db, $sql, $params);
+}
+function regist_purchase_transaction($db, $user_id, $now_date, $total_price){
+  $db->beginTransaction();
+    if(insert_purchase_history($db, $user_id, $now_date, $total_price)){
+      $db->commit();
+      return true;
+    }
+    $db->rollback();
+    return false;
+}
+function insert_purchase_history($db, $user_id, $now_date, $total_price){
+  $sql = "
+    INSERT INTO
+      purchase_history(
+        user_id,
+        purchase_datetime,
+        purchase_total_price
+      )
+    VALUES(?,?,?)
+    ";
+$params[] = $user_id;
+$params[] = $now_date;
+$params[] = $total_price;
+    return execute_query($db,$sql,$params);
+}
 function update_cart_amount($db, $cart_id, $amount){
   $sql = "
     UPDATE
@@ -102,8 +163,9 @@ function delete_cart($db, $cart_id){
   $params[] = $cart_id;
   return execute_query($db, $sql,$params);
 }
-
+//購入処理
 function purchase_carts($db, $carts){
+  //バリデーションチェック
   if(validate_cart_purchase($carts) === false){
     return false;
   }
@@ -116,7 +178,7 @@ function purchase_carts($db, $carts){
       set_error($cart['name'] . 'の購入に失敗しました。');
     }
   }
-  
+
   delete_user_carts($db, $carts[0]['user_id']);
 }
 
@@ -130,7 +192,6 @@ function delete_user_carts($db, $user_id){
   $params[] = $user_id;
   execute_query($db, $sql,$params);
 }
-
 
 function sum_carts($carts){
   $total_price = 0;
@@ -158,4 +219,3 @@ function validate_cart_purchase($carts){
   }
   return true;
 }
-
