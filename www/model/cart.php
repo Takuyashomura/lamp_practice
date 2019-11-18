@@ -96,7 +96,7 @@ function insert_cart($db, $item_id, $user_id, $amount = 1){
 
   return execute_query($db, $sql);
 }
-function insert_purchase_details($db, $sql){
+function insert_purchase_details($db,$cart,$order_id){
   $sql = "
     INSERT INTO
       purchase_details(
@@ -108,14 +108,18 @@ function insert_purchase_details($db, $sql){
       VALUES(?,?,?,?)
       ";
       $params[] = $order_id;
-      $params[] = $item_id;
-      $params[] = $purchase_item_price;
-      $params[] = $purchase_item_amount;
+      $params[] = $cart['item_id'];
+      $params[] = $cart['price'];
+      $params[] = $cart['amount'];
       return execute_query($db, $sql, $params);
 }
-function regist_purchase_transaction($db, $user_id, $now_date, $total_price){
+function regist_purchase_transaction($db, $user_id, $now_date, $total_price,$carts){
   $db->beginTransaction();
-    if(insert_purchase_history($db, $user_id, $now_date, $total_price)){
+    if(insert_purchase_history($db, $user_id, $now_date,$total_price)){
+      $order_id = $db->lastinsertid('order_id');
+      foreach($carts as $cart){
+      insert_purchase_details($db, $cart, $order_id);
+      }
       $db->commit();
       return true;
     }
