@@ -1,5 +1,4 @@
 <?php
-
 function dd($var){
   var_dump($var);
   exit();
@@ -30,7 +29,7 @@ function get_file($name){
   };
   return array();
 }
-
+//セッションID取得
 function get_session($name){
   if(isset($_SESSION[$name]) === true){
     return $_SESSION[$name];
@@ -71,7 +70,7 @@ function get_messages(){
   set_session('__messages',  array());
   return $messages;
 }
-
+//セッションIDが取得されているかチェックする関数
 function is_logined(){
   return get_session('user_id') !== '';
 }

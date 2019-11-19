@@ -104,13 +104,13 @@ CREATE TABLE `purchase_history` (
 -- テーブルの構造`purchase_details`
 --
 
-CREATE TABLE `purchase_datails`(
+CREATE TABLE `purchase_details`(
   `details_id`  int(11) NOT NULL,
   `order_id`     int(11) NOT NULL,
   `item_id`     int(11) NOT NULL,
   `purchase_item_price`   int(11) NOT NULL,
   `purchase_item_amount`  int(11) NOT NULL
-) ENGIN=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 --
@@ -134,13 +134,11 @@ ALTER TABLE `users`
   ADD PRIMARY KEY (`user_id`);
 
 --
---テーブルのインデックス`purchase_history`
 --
 ALTER TABLE `purchase_history`
   ADD PRIMARY KEY (`order_id`);
 
 --
---テーブルのインデックス`purchase_details`
 --
 ALTER TABLE `purchase_details`
   ADD PRIMARY KEY (`details_id`);
@@ -162,22 +160,22 @@ ALTER TABLE `items`
   MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
--- テーブルのAUTO_INCREMENT `users`
+--
 --
 ALTER TABLE `users`
   MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
---テーブルのAUTO_INCREMENT `purchase_history`
+--
 --
 ALTER TABLE `purchase_history`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT,
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
---テーブルのAUTO_INCREMENT `purchase_details`
+--
 --
 ALTER TABLE `purchase_details`
-  MODIFY `details_id` int(11) NOT NULL AUTO_INCREMENT,
+  MODIFY `details_id` int(11) NOT NULL AUTO_INCREMENT;
   
 --
 -- ダンプしたテーブルの制約

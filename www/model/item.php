@@ -89,6 +89,7 @@ function insert_item($db, $name, $price, $stock, $filename, $status){
   return execute_query($db, $sql);
 }
 
+//ステータスアップデート用SQL
 function update_item_status($db, $item_id, $status){
   $sql = "
     UPDATE
@@ -101,6 +102,8 @@ function update_item_status($db, $item_id, $status){
   ";
   $params[] = $status;
   $params[] = $item_id;
+
+  //SQL実行
   return execute_query($db, $sql,$params);
 }
 

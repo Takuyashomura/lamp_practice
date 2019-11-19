@@ -12,15 +12,19 @@ if(is_logined() === false){
 }
 
 $db = get_db_connect();
+
 $user = get_login_user($db);
 
 $carts = get_user_carts($db, $user['user_id']);
 
-if(purchase_carts($db, $carts) === false){
+$carts = entity_assoc_array($carts);
+
+$now_date = date('Y-m-d H:i:s');
+$total_price = sum_carts($carts);
+
+if(purchase_carts($db, $carts) === false || regist_purchase_transaction($db, $user['user_id'], $now_date, $total_price,$carts) === false){
   set_error('商品が購入できませんでした。');
   redirect_to(CART_URL);
-} 
-
-$total_price = sum_carts($carts);
+}
 
 include_once '../view/finish_view.php';
