@@ -18,7 +18,7 @@ $items = get_open_items($db);
 $total_items = count($items);
 $max_page = ceil($total_items / MAX_ITEMS);
 
-if(!isset($_GET['page']) || is_numeric($_GET['page']) === false || $_GET['page'] <= 0 || $_GET['page'] > $max_page ){
+if(!isset($_GET['page']) || ctype_digit($_GET['page']) === false || $_GET['page'] <= 0 || $_GET['page'] > $max_page ){
   $now_page = '1';
 } else {
   $now_page = $_GET['page'];
