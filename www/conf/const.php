@@ -52,4 +52,4 @@ define('PERMITTED_IMAGE_TYPES', array(
   IMAGETYPE_PNG => 'png',
 ));
 
-define('MAX','8');
+define('MAX_ITEMS','8');

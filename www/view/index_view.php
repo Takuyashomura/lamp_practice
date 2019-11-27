@@ -2,7 +2,14 @@
 <html lang="ja">
 <head>
   <?php include VIEW_PATH . 'templates/head.php'; ?>
-  
+  <style>
+    .page_list{
+      margin: 0 auto;
+    }
+    .page_list a{
+      margin: 0 10px;
+    }
+  </style>
   <title>商品一覧</title>
   <link rel="stylesheet" href="<?php print(STYLESHEET_PATH . 'index.css'); ?>">
 </head>
@@ -46,31 +53,31 @@
       <div>
       <?php echo $total_items. '件中' .$get_items. '件表示';?>
       </div>
-      <div>
+      <div class="page_list">
       <?php if($now_page > 1){
-        echo '<a href=\'/index.php?page=1\')>最初のページへ</a>';
+        echo '<a href=\'/index.php?page=1\')>&lt;&lt;</a>';
       } else {
         echo ' ';
       }?>
       <?php if($now_page > 1){
-        echo '<a href=\'/index.php?page='.($now_page - 1).'\')>前のページへ</a>';
+        echo '<a href=\'/index.php?page='.($now_page - 1).'\')>&lt;</a>';
       } else {
         echo ' ';
       } ?>
       <?php for($i = 1;$i <= $max_page; $i++){
     if($i === (int)$now_page){
-    echo $now_page. '';
+    echo $now_page. '  ';
   } else {
     echo '<a href=\'/index.php?page='. $i.'\')>'. $i.'</a>'. ' ';
   } 
   }?>
   <?php if($now_page < $max_page){
-    echo '<a href=\'/index.php?page='.($now_page + 1).'\')>次のページへ</a>';
+    echo '<a href=\'/index.php?page='.($now_page + 1).'\')>&gt;</a>';
   } else {
     echo ' ';
   } ?>
   <?php if($now_page < $max_page){
-    echo '<a href=\'/index.php?page='.$max_page.'\')>最後のページへ</a>';
+    echo '<a href=\'/index.php?page='.$max_page.'\')>&gt;&gt;</a>';
   } else {
     echo ' ';
   } ?>
