@@ -58,22 +58,32 @@ function get_user_purchase($db, $user_id){
     SELECT
       order_id,
       purchase_datetime,
-      purchase_total_price,
-      items.item_id,
-      items.price,
-      carts.amount
+      purchase_total_price
     FROM
       purchase_history
-    JOIN
-      items
-    JOIN
-      carts
-    ON
-      items.item_id = carts.item_id
     WHERE
-      purchase_history.user_id = ?";
+      user_id = ?";
   $params[] = $user_id;
-  return fetch_query($db,$sql,$params);
+  return fetch_all_query($db,$sql,$params);
+}
+function get_user_details($db,$order_id){
+  $sql = "
+    SELECT
+      name,
+      purchase_item_price,
+      purchase_item_amount,
+      purchase_datetime,
+      purchase_total_price
+    FROM
+      purchase_details
+    JOIN
+      purchase_history
+    ON
+      purchase_details.order_id = purchase_history.order_id
+    WHERE
+      purchase_details.order_id = ?";
+  $params[] = $order_id;
+  return fetch_all_query($db,$sql,$params);
 }
 function add_cart($db, $item_id, $user_id) {
   $cart = get_user_cart($db, $item_id, $user_id);
@@ -101,14 +111,14 @@ function insert_purchase_details($db,$cart,$order_id){
     INSERT INTO
       purchase_details(
         order_id,
-        item_id,
+        name,
         purchase_item_price,
         purchase_item_amount
         )
       VALUES(?,?,?,?)
       ";
       $params[] = $order_id;
-      $params[] = $cart['item_id'];
+      $params[] = $cart['name'];
       $params[] = $cart['price'];
       $params[] = $cart['amount'];
       return execute_query($db, $sql, $params);

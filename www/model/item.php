@@ -4,6 +4,30 @@ require_once 'db.php';
 
 // DB利用
 
+
+function get_item_pagenation($db,$is_open = false,$start_items,$max_items){
+  $sql = '
+    SELECT
+      item_id, 
+      name,
+      stock,
+      price,
+      image,
+      status
+    FROM
+      items
+  ';
+  if($is_open === true){
+    $sql .= '
+      WHERE status = 1
+      LIMIT ?,?
+    ';
+  }
+     $params[] = $start_items;
+     $params[] = $max_items;
+
+  return fetch_all_query($db, $sql,$params);
+}
 //itemデータを取得する関数
 function get_item($db, $item_id){
   $sql = "

@@ -2,7 +2,15 @@
 <html lang="ja">
 <head>
   <?php include VIEW_PATH . 'templates/head.php'; ?>
-  
+  <style>
+    .page_list{
+      margin: 0 auto;
+    }
+    .page_list a{
+      margin: 0 10px;
+      font-size: 20px;
+    }
+  </style>
   <title>商品一覧</title>
   <link rel="stylesheet" href="<?php print(STYLESHEET_PATH . 'index.css'); ?>">
 </head>
@@ -16,14 +24,14 @@
 
     <div class="card-deck">
       <div class="row">
-      <?php foreach($items as $item){ ?>
+      <?php foreach($item_list as $item){ ?>
         <div class="col-6 item">
           <div class="card h-100 text-center">
             <div class="card-header">
               <?php print($item['name']); ?>
             </div>
             <figure class="card-body">
-              <img class="card-img" src="<?php print(IMAGE_PATH . $item['image']); ?>">
+              <img class="card-img" src="<?php print(IMAGE_PATH . $item['image']); ?>" height="300px">
               <figcaption>
                 <?php print(number_format($item['price'])); ?>円
                 <?php if($item['stock'] > 0){ ?>
@@ -41,7 +49,33 @@
       <?php } ?>
       </div>
     </div>
+    </div>
+    <div class="text-center">
+      <div>
+      <?php echo $total_items. '件中' .$get_items. '件表示';?>
+      </div>
+      <div class="page_list">
+    <?php if($now_page > 1){
+        echo '<a href=\'/index.php?page=1\')>&lt;&lt;</a>';
+      }
+    if($now_page > 1){
+        echo '<a href=\'/index.php?page='.($now_page - 1).'\')>&lt;</a>';
+      }
+    for($i = 1;$i <= $max_page; $i++){
+    if($i === (int)$now_page){
+      echo '<a>'.$now_page.'</a>';
+        } else {
+          echo '<a href=\'/index.php?page='. $i.'\')>'. $i.'</a>'. ' ';
+        } 
+        }
+    if($now_page < $max_page){
+      echo '<a href=\'/index.php?page='.($now_page + 1).'\')>&gt;</a>';
+    }
+    if($now_page < $max_page){
+      echo '<a href=\'/index.php?page='.$max_page.'\')>&gt;&gt;</a>';
+    }
+    ?>
   </div>
-  
+  </div>
 </body>
 </html>
